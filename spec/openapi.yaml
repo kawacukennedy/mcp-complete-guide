@@ -1,0 +1,42 @@
+openapi: 3.0.3
+info:
+  title: MCP HTTP API
+  version: '1.0.0'
+servers:
+  - url: http://localhost:8080
+paths:
+  /manifest:
+    get:
+      summary: Get capability manifest
+      responses:
+        '200':
+          description: Manifest
+  /invoke:
+    post:
+      summary: Invoke a tool
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvokeRequest'
+      responses:
+        '200':
+          description: Invoke response
+components:
+  schemas:
+    InvokeRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        tool:
+          type: string
+        input:
+          type: object
+    InvokeResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        result:
+          type: object

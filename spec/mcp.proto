@@ -1,0 +1,29 @@
+syntax = "proto3";
+package mcp;
+
+message Metadata {
+  string trace_id = 1;
+  string span_id = 2;
+  string requester = 3;
+  map<string,string> labels = 4;
+}
+
+message InvokeRequest {
+  string id = 1;
+  string tool = 2;
+  bytes input_json = 3;
+  Metadata meta = 4;
+}
+
+message InvokeResponse {
+  string id = 1;
+  bytes output_json = 2;
+  int32 error_code = 3;
+  string error_message = 4;
+  Metadata meta = 5;
+}
+
+service ToolService {
+  rpc Invoke(InvokeRequest) returns (InvokeResponse);
+  rpc StreamInvoke(stream InvokeRequest) returns (stream InvokeResponse);
+}

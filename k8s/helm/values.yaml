@@ -1,0 +1,6 @@
+replicaCount: 2
+image:
+  repository: yourdocker/repo
+  tag: latest
+service:
+  port: 8080

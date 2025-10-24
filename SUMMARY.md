@@ -1,0 +1,30 @@
+# Table of contents
+
+- docs/
+  - 01_overview.md
+  - 02_terminology.md
+  - 03_exhaustive_topic_index.md
+  - 04_protocol_specification.md
+  - 05_message_formats_jsonrpc_protobuf.md
+  - 06_manifest_and_discovery.md
+  - 07_transport_patterns.md
+  - 08_reference_server_architectures.md
+  - 09_security_model.md
+  - 10_threat_model_examples.md
+  - 11_privacy_compliance.md
+  - 12_input_validation_schema.md
+  - 13_error_handling_retry_model.md
+  - 14_observability_metrics_tracing_logging.md
+  - 15_testing_and_contracts.md
+  - 16_ci_cd_and_security_scans.md
+  - 17_deployment_and_k8s.md
+  - 18_scaling_caching_consistency.md
+  - 19_operational_runbooks.md
+  - 20_sdk_and_cli.md
+  - 21_examples_and_tutorials.md
+- spec/
+- examples/
+- k8s/
+- ci/
+- tools/
+- tests/

@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MCP InvokeRequest",
+  "type": "object",
+  "required": ["id","tool","input"],
+  "properties": {
+    "id": {"type":"string","format":"uuid"},
+    "tool": {"type":"string"},
+    "input": {"type":["object","array","string","number","null"]},
+    "meta": {
+      "type":"object",
+      "properties": {
+        "trace_id": {"type":"string"},
+        "span_id": {"type":"string"},
+        "requester": {"type":"string"},
+        "auth": {"type":"object"}
+      }
+    }
+  },
+  "additionalProperties": false
+}

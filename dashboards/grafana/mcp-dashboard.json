@@ -1,0 +1,9 @@
+{
+  "dashboard": {
+    "title": "MCP Overview",
+    "panels": [
+      {"title":"Invocations per tool","type":"graph","targets":[{"expr":"sum(mcp_invocations_total) by (tool)"}]},
+      {"title":"Latency p95","type":"stat","targets":[{"expr":"histogram_quantile(0.95, sum(rate(mcp_invoke_latency_ms_bucket[5m])) by (le,tool))"}]}
+    ]
+  }
+}
