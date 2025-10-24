@@ -13,3 +13,10 @@ This repository contains:
 - Tests: unit, contract, integration, fuzzing harness, load test scripts (k6 & locust)
 
 See `SUMMARY.md` for the table of contents and `docs/` for detailed chapters.
+
+<!-- SEO Meta -->
+<meta name="description" content="Exhaustive guide and starter kit for Model Context Protocol (MCP) servers with specs, implementations in Python, Node.js, Go, security, observability, and deployment.">
+<meta name="keywords" content="MCP, Model Context Protocol, AI tools, server implementations, JSON-RPC, gRPC, observability, security">
+<meta name="author" content="kawacukennedy">
+<link rel="canonical" href="https://kawacukennedy.github.io/mcp-complete-guide/">
+<!-- End SEO Meta -->
