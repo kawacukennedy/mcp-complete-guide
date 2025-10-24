@@ -1,0 +1,257 @@
+{
+  "repo_name": "mcp-complete-guide",
+  "description": "Exhaustive, canonical guide and starter kit for the Model Context Protocol (MCP) and MCP servers: specifications, multi-language reference implementations (Python, Node.js, Go), transports (STDIN/STDOUT plugin, HTTP/JSON, WebSocket, gRPC), security best practices, CI/CD, testing, observability, runbooks, SDKs, Helm charts, and operational artifacts.",
+  "visibility": "public",
+  "default_branch": "main",
+  "license": "MIT",
+  "notes": "This JSON is a complete specification. Each `structure` entry is a file to create with the given `path` and `content`. Binary diagrams are placeholders — add images separately. All code examples should be runnable with minimal setup.",
+  "structure": [
+    {
+      "path": "README.md",
+      "type": "text/markdown",
+      "content": "# MCP Complete Guide\n\n**The most exhaustive repository spec for Model Context Protocol (MCP) and MCP servers.**\n\nThis repository contains:\n- Formal spec (JSON Schema + Protobuf + OpenAPI)\n- Multi-language reference servers (Python aiohttp, Node Express + WS, Go gRPC + HTTP)\n- SDKs (Python, Node, Go) and CLI `mcpctl`\n- Full CI/CD with security scanning and SBOM generation\n- Kubernetes Helm chart and example manifests\n- Observability: OpenTelemetry, Prometheus metrics, Grafana dashboard JSON\n- Security: OPA policies (Rego), sample mTLS and OAuth setups, runbooks\n- Tests: unit, contract, integration, fuzzing harness, load test scripts (k6 & locust)\n\nSee `SUMMARY.md` for the table of contents and `docs/` for detailed chapters.\n"
+    },
+    {
+      "path": "SUMMARY.md",
+      "type": "text/markdown",
+      "content": "# Table of contents\n\n- docs/\n  - 01_overview.md\n  - 02_terminology.md\n  - 03_exhaustive_topic_index.md\n  - 04_protocol_specification.md\n  - 05_message_formats_jsonrpc_protobuf.md\n  - 06_manifest_and_discovery.md\n  - 07_transport_patterns.md\n  - 08_reference_server_architectures.md\n  - 09_security_model.md\n  - 10_threat_model_examples.md\n  - 11_privacy_compliance.md\n  - 12_input_validation_schema.md\n  - 13_error_handling_retry_model.md\n  - 14_observability_metrics_tracing_logging.md\n  - 15_testing_and_contracts.md\n  - 16_ci_cd_and_security_scans.md\n  - 17_deployment_and_k8s.md\n  - 18_scaling_caching_consistency.md\n  - 19_operational_runbooks.md\n  - 20_sdk_and_cli.md\n  - 21_examples_and_tutorials.md\n- spec/\n- examples/\n- k8s/\n- ci/\n- tools/\n- tests/\n"
+    },
+    {
+      "path": "docs/01_overview.md",
+      "type": "text/markdown",
+      "content": "# 01 — Overview\n\nThis chapter explains what MCP is, why it exists, core goals, and common usage patterns.\n\n## Use-cases (concrete)\n- LLM tool invocation (search, code execution, DB query)\n- Model fetching structured context (user profile, transaction history)\n- Agent orchestration (model coordinates tasks calling many tools)\n- Secure secrets retrieval with audit trails\n\n## Non-goals\n- MCP is not an LLM training format.\n- MCP does not prescribe internal model prompt engineering.\n"
+    },
+    {
+      "path": "docs/02_terminology.md",
+      "type": "text/markdown",
+      "content": "# 02 — Terminology\n\nDefine all terms precisely: Model, Agent, MCP Server, Capability, Manifest, Invocation, Notification, Trace, Span, Idempotency, Provenance, Audit Log, WORM store, RBAC, ABAC, OIDC, mTLS, SBOM, SCA.\n"
+    },
+    {
+      "path": "docs/03_exhaustive_topic_index.md",
+      "type": "text/markdown",
+      "content": "# 03 — Exhaustive Topic Index\n\nThis file is a checklist mapping to docs and code. For each item, the repo must include explanations, examples, tests, or automation:\n\n1. Protocol & message formats (JSON-RPC, JSON schema, Protobuf + gRPC) — *spec + examples*\n2. Capability manifest: schema, examples, versioning, discovery — *spec + example manifest*\n3. JSON Schema best practices: required fields, `additionalProperties`, semantic validation — *schemas + tests*\n4. Transport implementations: STDIN/STDOUT plugin, HTTP (REST + JSON-RPC), WebSocket streaming, gRPC (unary & streaming), Kafka/RabbitMQ patterns — *examples*\n5. Authentication: OAuth2 client credentials, OIDC tokens, JWT verification, mTLS config examples — *examples & CI tests*\n6. Authorization: capability-based RBAC, sample policy definitions (Rego), ABAC examples — *policy + tests*\n7. Input validation & sanitization: whitelists, regex, schema & semantic checks — *examples*\n8. Error model: canonical errors, codes list, retry semantics — *spec + client handling examples*\n9. Idempotency: token usage, deduplication examples — *code + tests*\n10. Auditing & provenance: sample immutable audit logs, Merkle signed logs (example), WORM storage guidance — *docs + scripts*\n11. Observability: OpenTelemetry demo, Prometheus metrics exposition, Grafana JSON dashboards — *examples*\n12. Security: threat models, sandboxing code-execution (WASM/container), network egress controls — *docs + runbooks*\n13. CI/CD: lint, tests, SBOM generation (syft), container scans (trivy), dependency checks (snyk) — *workflows*\n14. Packaging & deploy: Dockerfile, Helm chart, k8s manifests (readiness/liveness, NetworkPolicy) — *artifacts*\n15. SDKs & CLI: Python, Node, Go; typed clients; `mcpctl` commands — *examples*\n16. Tests: unit, integration, contract, fuzz tests (Atheris/boofuzz), load tests (k6/locust) — *scripts & CI*\n17. Examples: file search, db query (Postgres), vector search example (milvus/FAISS), secret retrieval with Vault — *examples*\n18. Release process & changelog automation — *docs & GH Actions*\n19. Governance: contribution rules, PR process, security policy — *files*\n20. Legal & compliance: PII redaction, data retention, GDPR, PCI/HIPAA considerations — *docs*\n\n> The repo generator must ensure these items have corresponding files/folders and at least one runnable example where applicable.\n"
+    },
+    {
+      "path": "docs/04_protocol_specification.md",
+      "type": "text/markdown",
+      "content": "# 04 — Protocol Specification (authoritative)\n\n- Full JSON Schema for `InvokeRequest`, `InvokeResponse`, `Manifest` (see `spec/`)\n- Versioning rules: MAJOR.MINOR.PATCH; compatibility matrix and migration examples\n- Example sequences: discovery → invoke → stream results → close\n- Canonical header/metadata fields and semantics\n"
+    },
+    {
+      "path": "spec/invoke_request.schema.json",
+      "type": "code/json",
+      "content": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"title\": \"MCP InvokeRequest\",\n  \"type\": \"object\",\n  \"required\": [\"id\",\"tool\",\"input\"],\n  \"properties\": {\n    \"id\": {\"type\":\"string\",\"format\":\"uuid\"},\n    \"tool\": {\"type\":\"string\"},\n    \"input\": {\"type\":[\"object\",\"array\",\"string\",\"number\",\"null\"]},\n    \"meta\": {\n      \"type\":\"object\",\n      \"properties\": {\n        \"trace_id\": {\"type\":\"string\"},\n        \"span_id\": {\"type\":\"string\"},\n        \"requester\": {\"type\":\"string\"},\n        \"auth\": {\"type\":\"object\"}\n      }\n    }\n  },\n  \"additionalProperties\": false\n}\n"
+    },
+    {
+      "path": "spec/invoke_response.schema.json",
+      "type": "code/json",
+      "content": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"title\": \"MCP InvokeResponse\",\n  \"type\": \"object\",\n  \"required\": [\"id\"],\n  \"properties\": {\n    \"id\": {\"type\":\"string\"},\n    \"result\": {\"type\":[\"object\",\"array\",\"string\",\"number\",\"null\"]},\n    \"error\": {\n      \"type\":\"object\",\n      \"properties\": {\n        \"code\": {\"type\":\"integer\"},\n        \"message\": {\"type\":\"string\"},\n        \"details\": {}\n      }\n    },\n    \"meta\": {\"type\":\"object\"}\n  },\n  \"additionalProperties\": false\n}\n"
+    },
+    {
+      "path": "spec/manifest.schema.json",
+      "type": "code/json",
+      "content": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"title\": \"MCP Manifest\",\n  \"type\":\"object\",\n  \"required\":[\"mcp_version\",\"service\",\"capabilities\"],\n  \"properties\":{\n    \"mcp_version\":{\"type\":\"string\"},\n    \"service\":{\"type\":\"string\"},\n    \"service_version\":{\"type\":\"string\"},\n    \"capabilities\":{\"type\":\"array\",\"items\":{\"type\":\"object\"}}\n  }\n}\n"
+    },
+    {
+      "path": "spec/mcp.proto",
+      "type": "code/protobuf",
+      "content": "syntax = \"proto3\";\npackage mcp;\n\nmessage Metadata {\n  string trace_id = 1;\n  string span_id = 2;\n  string requester = 3;\n  map<string,string> labels = 4;\n}\n\nmessage InvokeRequest {\n  string id = 1;\n  string tool = 2;\n  bytes input_json = 3;\n  Metadata meta = 4;\n}\n\nmessage InvokeResponse {\n  string id = 1;\n  bytes output_json = 2;\n  int32 error_code = 3;\n  string error_message = 4;\n  Metadata meta = 5;\n}\n\nservice ToolService {\n  rpc Invoke(InvokeRequest) returns (InvokeResponse);\n  rpc StreamInvoke(stream InvokeRequest) returns (stream InvokeResponse);\n}\n"
+    },
+    {
+      "path": "spec/openapi.yaml",
+      "type": "code/yaml",
+      "content": "openapi: 3.0.3\ninfo:\n  title: MCP HTTP API\n  version: '1.0.0'\nservers:\n  - url: http://localhost:8080\npaths:\n  /manifest:\n    get:\n      summary: Get capability manifest\n      responses:\n        '200':\n          description: Manifest\n  /invoke:\n    post:\n      summary: Invoke a tool\n      requestBody:\n        content:\n          application/json:\n            schema:\n              $ref: '#/components/schemas/InvokeRequest'\n      responses:\n        '200':\n          description: Invoke response\ncomponents:\n  schemas:\n    InvokeRequest:\n      type: object\n      properties:\n        id:\n          type: string\n        tool:\n          type: string\n        input:\n          type: object\n    InvokeResponse:\n      type: object\n      properties:\n        id:\n          type: string\n        result:\n          type: object\n"
+    },
+    {
+      "path": "examples/python_server/Dockerfile",
+      "type": "code/dockerfile",
+      "content": "FROM python:3.11-slim\nWORKDIR /app\nCOPY examples/python_server/requirements.txt ./\nRUN pip install --no-cache-dir -r requirements.txt\nCOPY examples/python_server/ server/\nEXPOSE 8080\nCMD [\"python\",\"server/server.py\"]\n"
+    },
+    {
+      "path": "examples/python_server/requirements.txt",
+      "type": "text/plain",
+      "content": "aiohttp==3.8.4\njsonschema==4.19.0\nprometheus-client==0.16.0\nopentelemetry-api==1.18.0\nopentelemetry-sdk==1.18.0\npython-json-logger==2.0.4\n"
+    },
+    {
+      "path": "examples/python_server/server/server.py",
+      "type": "code/python",
+      "content": "import asyncio\nimport json\nimport logging\nimport os\nimport uuid\nfrom aiohttp import web\nfrom jsonschema import validate, ValidationError\nfrom prometheus_client import Counter, Histogram, start_http_server\nfrom pythonjsonlogger import jsonlogger\n\n# Structured logging\nlogger = logging.getLogger('mcp-python')\nlogHandler = logging.StreamHandler()\nformatter = jsonlogger.JsonFormatter('%(asctime)s %(levelname)s %(name)s %(message)s')\nlogHandler.setFormatter(formatter)\nlogger.addHandler(logHandler)\nlogger.setLevel(logging.INFO)\n\n# Prometheus metrics (exposed on :9090 by start_http_server)\nINVOCATIONS = Counter('mcp_invocations_total', 'Total invocations', ['tool'])\nINVOCATION_LATENCY = Histogram('mcp_invoke_latency_ms', 'Invoke latency ms', ['tool'])\n\nMANIFEST = json.loads(open(os.path.join(os.path.dirname(__file__), '..', '..', 'spec', 'manifest_example.json')).read())\n\nasync def manifest(request):\n    return web.json_response(MANIFEST)\n\nasync def health(request):\n    return web.json_response({'status':'ok'})\n\nasync def invoke(request):\n    try:\n        payload = await request.json()\n    except Exception as e:\n        return web.json_response({'jsonrpc':'2.0','error':{'code':400,'message':'invalid_json'}}, status=400)\n\n    req_id = payload.get('id') or str(uuid.uuid4())\n    params = payload.get('params', {})\n    tool = params.get('tool')\n    input_payload = params.get('input', {})\n\n    capability = next((c for c in MANIFEST['capabilities'] if c['name']==tool), None)\n    if not capability:\n        return web.json_response({'jsonrpc':'2.0','id':req_id,'error':{'code':404,'message':'unknown_tool'}}, status=404)\n\n    # Validate input schema\n    schema_ref = capability.get('input_schema_ref')\n    if schema_ref:\n        schema_path = os.path.join(os.path.dirname(__file__), '..', '..', schema_ref.lstrip('/'))\n        with open(schema_path) as f:\n            schema = json.load(f)\n        try:\n            validate(instance=input_payload, schema=schema)\n        except ValidationError as e:\n            return web.json_response({'jsonrpc':'2.0','id':req_id,'error':{'code':4001,'message':'validation_failed','details':str(e)}}, status=400)\n\n    INVOCATIONS.labels(tool).inc()\n    with INVOCATION_LATENCY.labels(tool).time():\n        # Dispatch simple built-in tools\n        if tool == 'get_time':\n            from datetime import datetime\n            result = {'time': datetime.utcnow().isoformat() + 'Z'}\n        elif tool == 'echo':\n            result = {'echo': input_payload}\n        elif tool == 'file_search':\n            q = input_payload.get('query','')\n            # demo: return stubbed results\n            result = {'matches':[{'path':'/var/log/syslog','score':0.93,'snippet':'...'}]}\n        else:\n            result = {'error': 'not_implemented'}\n\n    logger.info(json.dumps({'event':'invoke','id':req_id,'tool':tool,'result_keys':list(result.keys())}))\n    return web.json_response({'jsonrpc':'2.0','id':req_id,'result':result})\n\napp = web.Application()\napp.add_routes([web.get('/manifest', manifest), web.post('/invoke', invoke), web.get('/healthz', health)])\n\nif __name__ == '__main__':\n    # Start Prometheus metrics server on 9090 for scrape\n    start_http_server(9090)\n    web.run_app(app, host='0.0.0.0', port=8080)\n"
+    },
+    {
+      "path": "spec/manifest_example.json",
+      "type": "code/json",
+      "content": "{\n  \"mcp_version\": \"1.0.0\",\n  \"service\": \"python-example-server\",\n  \"service_version\": \"1.0.0\",\n  \"capabilities\": [\n    {\"name\":\"get_time\",\"description\":\"Get current UTC time\",\"input_schema_ref\":\"/spec/schemas/empty.json\",\"output_schema_ref\":\"/spec/schemas/get_time_output.json\",\"auth_required\":false,\"idempotent\":true},\n    {\"name\":\"echo\",\"description\":\"Echo input\",\"input_schema_ref\":\"/spec/schemas/any.json\",\"output_schema_ref\":\"/spec/schemas/any.json\",\"auth_required\":false,\"idempotent\":true},\n    {\"name\":\"file_search\",\"description\":\"Search indexed files\",\"input_schema_ref\":\"/spec/schemas/file_search_input.json\",\"output_schema_ref\":\"/spec/schemas/file_search_output.json\",\"auth_required\":true,\"scopes\":[\"file:read\"],\"rate_limit\":{\"requests_per_minute\":120}}\n  ]\n}\n"
+    },
+    {
+      "path": "spec/schemas/file_search_input.json",
+      "type": "code/json",
+      "content": "{\n  \"$schema\":\"http://json-schema.org/draft-07/schema#\",\n  \"title\":\"FileSearchInput\",\n  \"type\":\"object\",\n  \"required\":[\"query\"],\n  \"properties\":{\n    \"query\":{\"type\":\"string\",\"minLength\":1,\"maxLength\":2000},\n    \"filters\":{\"type\":\"object\"},\n    \"limit\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":100}\n  },\n  \"additionalProperties\":false\n}\n"
+    },
+    {
+      "path": "spec/schemas/file_search_output.json",
+      "type": "code/json",
+      "content": "{\n  \"$schema\":\"http://json-schema.org/draft-07/schema#\",\n  \"title\":\"FileSearchOutput\",\n  \"type\":\"object\",\n  \"properties\":{\n    \"matches\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"path\":{\"type\":\"string\"},\"score\":{\"type\":\"number\"},\"snippet\":{\"type\":\"string\"}}}},\n    \"next_cursor\":{\"type\":[\"string\",\"null\"]}\n  },\n  \"additionalProperties\":false\n}\n"
+    },
+    {
+      "path": "examples/node_server/Dockerfile",
+      "type": "code/dockerfile",
+      "content": "FROM node:20\nWORKDIR /app\nCOPY examples/node_server/package.json ./\nRUN npm install\nCOPY examples/node_server/ .\nEXPOSE 8081\nCMD [\"node\",\"server.js\"]\n"
+    },
+    {
+      "path": "examples/node_server/server.js",
+      "type": "code/javascript",
+      "content": "// (Same structure as earlier but include JWT auth, simple policy check, and WS streaming example)\nconst express = require('express');\nconst bodyParser = require('body-parser');\nconst http = require('http');\nconst WebSocket = require('ws');\nconst fs = require('fs');\nconst jwt = require('jsonwebtoken');\n\nconst MANIFEST = JSON.parse(fs.readFileSync(__dirname + '/../spec/manifest_example.json'));\nconst app = express();\napp.use(bodyParser.json());\n\n// Simple JWT auth middleware for demo\nfunction authMiddleware(req,res,next){\n  const auth = req.headers['authorization'];\n  if(!auth) return res.status(401).json({error:'missing_auth'});\n  const token = auth.split(' ')[1];\n  try{\n    // NOTE: in prod verify with JWKS\n    const payload = jwt.verify(token, 'demo-secret');\n    req.user = payload;\n    next();\n  }catch(e){\n    return res.status(401).json({error:'invalid_token'});\n  }\n}\n\napp.get('/manifest', (req,res)=>res.json(MANIFEST));\napp.post('/invoke', authMiddleware, (req,res)=>{\n  const { params } = req.body;\n  const tool = params?.tool;\n  // capability-level scope enforcement\n  const cap = MANIFEST.capabilities.find(c=>c.name===tool);\n  if(cap && cap.scopes){\n    const scopes = req.user?.scopes || [];\n    const ok = cap.scopes.every(s=>scopes.includes(s));\n    if(!ok) return res.status(403).json({error:'insufficient_scope'});\n  }\n  if(tool==='reverse'){\n    const text = params.input?.text||'';\n    return res.json({ jsonrpc:'2.0', id: req.body.id||'1', result: { reversed: text.split('').reverse().join('') } });\n  }\n  return res.status(400).json({ error:'unknown_tool' });\n});\n\nconst server = http.createServer(app);\nconst wss = new WebSocket.Server({ server });\n\nwss.on('connection', (ws) => {\n  ws.send(JSON.stringify({ type:'manifest', manifest: MANIFEST }));\n  ws.on('message',(msg)=>{ ws.send(JSON.stringify({ type:'echo', payload:msg })); });\n});\n\nserver.listen(8081, ()=>console.log('Node MCP server listening on 8081'));\n"
+    },
+    {
+      "path": "examples/go_server/README.md",
+      "type": "text/markdown",
+      "content": "# Go reference server (gRPC + HTTP)\n\nPlanned contents:\n- generated Go code from `spec/mcp.proto`\n- `cmd/server/main.go` implementing ToolService Invoke & StreamInvoke\n- sample Dockerfile and Kubernetes manifests\n\n(In this seed, provide detailed TODO + generator commands.)\n"
+    },
+    {
+      "path": "tools/mcpctl/mcpctl.py",
+      "type": "code/python",
+      "content": "#!/usr/bin/env python3\n\"\"\"mcpctl — simple CLI for MCP servers\nUsage:\n  mcpctl manifest http://localhost:8080\n  mcpctl invoke http://localhost:8080 get_time '{}'\n\"\"\"\nimport sys, requests, json\n\ndef manifest(url):\n    print(requests.get(url + '/manifest').json())\n\ndef invoke(url, tool, payload='{}'):\n    body = {'jsonrpc':'2.0','id':'cli-1','params':{'tool':tool,'input':json.loads(payload)}}\n    r = requests.post(url + '/invoke', json=body)\n    print(r.status_code, r.text)\n\nif __name__=='__main__':\n    cmd = sys.argv[1]\n    if cmd=='manifest': manifest(sys.argv[2])\n    elif cmd=='invoke': invoke(sys.argv[2], sys.argv[3], sys.argv[4] if len(sys.argv)>4 else '{}')\n    else: print('unknown')\n"
+    },
+    {
+      "path": "docs/14_observability_metrics_tracing_logging.md",
+      "type": "text/markdown",
+      "content": "# Observability — metrics, tracing, logging\n\n## Metrics (prometheus)\n- Expose: `mcp_invocations_total{tool}`, `mcp_invoke_latency_ms_bucket{tool}`, `mcp_errors_total{tool,code}`\n- Example scrape config snippet\n\n## Tracing\n- Propagate `trace_id` and `span_id` in `meta`\n- Use OpenTelemetry and exporters (OTLP) to jaeger/tempo\n\n## Logs\n- Structured JSON logs with fields: timestamp, severity, service, tool, request_id, trace_id, user\n- Example log line JSON in `examples/logs/sample_log.json`\n"
+    },
+    {
+      "path": "examples/logs/sample_log.json",
+      "type": "code/json",
+      "content": "{\n  \"timestamp\":\"2025-10-24T12:34:56Z\",\n  \"level\":\"INFO\",\n  \"service\":\"python-example-server\",\n  \"event\":\"invoke_complete\",\n  \"id\":\"uuid-1234\",\n  \"tool\":\"get_time\",\n  \"duration_ms\":12\n}\n"
+    },
+    {
+      "path": "dashboards/grafana/mcp-dashboard.json",
+      "type": "code/json",
+      "content": "{\n  \"dashboard\": {\n    \"title\": \"MCP Overview\",\n    \"panels\": [\n      {\"title\":\"Invocations per tool\",\"type\":\"graph\",\"targets\":[{\"expr\":\"sum(mcp_invocations_total) by (tool)\"}]},\n      {\"title\":\"Latency p95\",\"type\":\"stat\",\"targets\":[{\"expr\":\"histogram_quantile(0.95, sum(rate(mcp_invoke_latency_ms_bucket[5m])) by (le,tool))\"}]}\n    ]\n  }\n}\n"
+    },
+    {
+      "path": "policy/opa/rego/capability_access.rego",
+      "type": "code/text",
+      "content": "package mcp.authz\n\n# Example: allow if requester has required scopes\nallow {\n  input.capability\n  required := data.capabilities[input.capability].scopes\n  req_scopes := input.auth.scopes\n  required_subset(required, req_scopes)\n}\n\nrequired_subset(req, have) {\n  count({s | s := req[_]}) == count({s | s := req[_]; s == have[_]})\n}\n"
+    },
+    {
+      "path": "ci/github_actions/ci.yml",
+      "type": "code/yaml",
+      "content": "name: CI\non: [push, pull_request]\n\njobs:\n  lint-test-build:\n    runs-on: ubuntu-latest\n    strategy:\n      matrix:\n        python-version: [3.10]\n    steps:\n      - uses: actions/checkout@v4\n      - name: Setup Python\n        uses: actions/setup-python@v4\n        with: {python-version: '3.10'}\n      - name: Install deps\n        run: |\n          pip install -r examples/python_server/requirements.txt\n          pip install pytest black flake8\n      - name: Format check\n        run: black --check .\n      - name: Lint check\n        run: flake8\n      - name: Unit tests\n        run: pytest -q\n  sbom-and-scan:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - name: Generate SBOM\n        run: |\n          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin\n          syft packages dir:.\n      - name: Container scan (Trivy)\n        uses: aquasecurity/trivy-action@master\n        with: {image-ref: 'yourdocker/repo:latest'}\n"
+    },
+    {
+      "path": "k8s/helm/Chart.yaml",
+      "type": "code/yaml",
+      "content": "apiVersion: v2\nname: mcp-python-example\nversion: 0.1.0\nappVersion: '1.0.0'\n"
+    },
+    {
+      "path": "k8s/helm/values.yaml",
+      "type": "code/yaml",
+      "content": "replicaCount: 2\nimage:\n  repository: yourdocker/repo\n  tag: latest\nservice:\n  port: 8080\n"
+    },
+    {
+      "path": "docs/15_testing_and_contracts.md",
+      "type": "text/markdown",
+      "content": "# Testing & contract verification\n\n## Contract tests\n- Use `spec/*.schema.json` to validate `/manifest` and `/invoke` responses.\n- Add a `tests/contract/test_manifest_contract.py` that requests `/manifest` and validates schema.\n\n## Fuzz tests\n- Use Atheris (Python) or boofuzz for JSON inputs; the repo must include a simple atheris harness demo under `tests/fuzz/`.\n\n## Load testing\n- Add k6 script and basic instructions to run locally and in CI if load-tests are desired.\n"
+    },
+    {
+      "path": "loadtests/k6/script.js",
+      "type": "code/javascript",
+      "content": "import http from 'k6/http';\nimport { sleep } from 'k6';\nexport default function(){\n  http.post('http://localhost:8080/invoke', JSON.stringify({jsonrpc:'2.0', id:'lt', params:{tool:'get_time', input:{}}}), {headers:{'Content-Type':'application/json'}});\n  sleep(1);\n}\n"
+    },
+    {
+      "path": "tests/contract/test_manifest_contract.py",
+      "type": "code/python",
+      "content": "import requests\nfrom jsonschema import validate\nimport json\n\nMANIFEST_SCHEMA = json.load(open('spec/manifest.schema.json'))\n\ndef test_manifest_contract():\n    r = requests.get('http://localhost:8080/manifest')\n    assert r.status_code==200\n    manifest = r.json()\n    validate(manifest, MANIFEST_SCHEMA)\n"
+    },
+    {
+      "path": "docs/16_ci_cd_and_security_scans.md",
+      "type": "text/markdown",
+      "content": "# CI/CD and security\n\n- Include SBOM generation using `syft` and `grype` or `cyclonedx` outputs.\n- Container scanning with `trivy` in CI.\n- Dependency scanning (Snyk) configured via GH Actions or scheduled job.\n- Build signing and image attestation (cosign) for release pipelines.\n"
+    },
+    {
+      "path": "docs/17_operational_runbooks.md",
+      "type": "text/markdown",
+      "content": "# Runbooks (detailed)\n\n## Runbook: High error-rate for a capability\n1. Identify scope: which tool(s) and pods.\n2. Check recent deploys and rollouts.\n3. Check logs for common error patterns.\n4. If new release suspected, rollback to previous image.\n5. Create temporary circuit-breakers or rate-limits.\n6. Follow postmortem template.\n\n## Runbook: Suspected data exfiltration\n1. Isolate service: block network egress.\n2. Preserve logs & evidence (WORM) and increase retention.\n3. Rotate all credentials used by the service.\n4. Engage security/compliance, notify legal as required.\n\n## Runbook: Token compromise / failing auth\n1. Revoke current tokens and rotate keys.\n2. Implement emergency key rotation.\n3. Update clients/SDKs with new issuer metadata.\n"
+    },
+    {
+      "path": "docs/18_policy_and_gov.md",
+      "type": "text/markdown",
+      "content": "# Policy as code and governance\n\n- OPA Rego policies shipped under `policy/opa/rego`.\n- Example policies: capability access, data residency enforcement, redact-if-sensitive.\n- Governance: PR process for adding capabilities, required tests, and security review checklist.\n"
+    },
+    {
+      "path": "tools/sbom/generate_sbom.sh",
+      "type": "code/bash",
+      "content": "#!/usr/bin/env bash\n# Generate SBOM for repo root using syft\nif ! command -v syft >/dev/null; then\n  echo 'syft not installed'\n  exit 1\nfi\nsyft . -o cyclonedx > sbom.cyclonedx.xml\n"
+    },
+    {
+      "path": "SECURITY.md",
+      "type": "text/markdown",
+      "content": "# Security Policy\n\nReport security issues to: security@example.com\n\nWe use: Snyk, Trivy, syft, grype. All security PRs must include SBOM updates and scanning artifacts.\n"
+    },
+    {
+      "path": "POLICY.md",
+      "type": "text/markdown",
+      "content": "# Contribution & Governance Policy\n\n- All capabilities added to `spec/manifest_example.json` must include input/output schemas, unit tests, and contract tests.\n- Security review required for code-execution tools.\n"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "type": "text/markdown",
+      "content": "# Contributing\n\n1. Open an issue explaining your change.\n2. Create an RFC for large changes.\n3. Fork and create branch, add tests and docs.\n4. PR must pass CI and security checks.\n"
+    },
+    {
+      "path": "CODE_OF_CONDUCT.md",
+      "type": "text/markdown",
+      "content": "Be respectful and inclusive. Follow contributor covenant.\n"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE.md",
+      "type": "text/markdown",
+      "content": "---\nname: Issue\nabout: Report a bug or request a feature\n---\n\n**Type**: bug/feature/doc\n**Description**:\n**Steps to reproduce**:\n**Expected**:\n**Environment**:\n"
+    },
+    {
+      "path": "docs/19_sdk_and_cli.md",
+      "type": "text/markdown",
+      "content": "# SDKs & CLI\n\n## Python SDK (requirements)\n- `mcp_sdk.Client(manifest_url)` that loads manifest and exposes `client.invoke('tool', input, metadata)` with trace propagation.\n- Example usage in `examples/sdk/python/README.md`.\n\n## Node SDK\n- Promise-based client; typed with JSDoc or TypeScript types.\n\n## mcpctl\n- CLI for discovery, simple invokes, and running integration tests locally.\n"
+    },
+    {
+      "path": "examples/sdk/python/client.py",
+      "type": "code/python",
+      "content": "import requests, json\n\nclass MCPClient:\n    def __init__(self, base_url):\n        self.base_url = base_url\n        self.manifest = requests.get(base_url + '/manifest').json()\n    def invoke(self, tool, input_payload, meta=None):\n        body = {'jsonrpc':'2.0','id':'sdk-1','params':{'tool':tool,'input':input_payload,'meta':meta or {}}}\n        r = requests.post(self.base_url + '/invoke', json=body)\n        return r.json()\n\nif __name__=='__main__':\n    c = MCPClient('http://localhost:8080')\n    print(c.invoke('get_time', {}))\n"
+    },
+    {
+      "path": "docs/20_examples_and_tutorials.md",
+      "type": "text/markdown",
+      "content": "# Examples & Step-by-step Tutorials\n\n- Quickstart: run python server & call with `mcpctl`.\n- Tutorial: Add new capability `sum_numbers` with schema, handler, tests, and docs.\n- Tutorial: Integrate Vault secret retrieval capability (design + code example).\n"
+    },
+    {
+      "path": "docs/21_appendices.md",
+      "type": "text/markdown",
+      "content": "# Appendices\n\n- Appendix A: JSON-RPC 2.0 summary\n- Appendix B: Example threat model templates\n- Appendix C: Example log rotation & retention policies\n- Appendix D: Glossary\n"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "type": "text/markdown",
+      "content": "# Changelog\n\n## [Unreleased]\n- Initial exhaustive scaffold\n"
+    },
+    {
+      "path": "LICENSE",
+      "type": "text/plain",
+      "content": "MIT License\n\nCopyright (c) 2025\n\nPermission is hereby granted, free of charge, to any person obtaining a copy...\n"
+    }
+  ],
+  "exhaustive_requirements": {
+    "manifest_behavior": "All example servers MUST expose `GET /.well-known/mcp/manifest` or `GET /manifest` (both allowed) and `POST /invoke`. The manifest must reference JSON Schema files under `/spec/schemas/` and include auth metadata (scopes).",
+    "security_and_policies": "Include OPA Rego policies for capability access; include sample mTLS instructions and example `openssl` commands for generating test certs; include OAuth2 client-credentials example using `oauth2-proxy` or mock issuer, plus sample JWT verification code in Node and Python examples.",
+    "observability": "All reference servers must include Prometheus metrics exposition (example counter and histogram) and a stubbed OpenTelemetry collector exporter configuration in docs. Provide Grafana dashboard JSON and instructions to import.",
+    "testing": "Add unit tests for server handlers, contract tests referencing `spec/*.schema.json`, an integration test that spins the server (or expects a running server) and executes sample invocations. Include a fuzzing harness (Python Atheris) to feed malformed JSON to handler functions. Include k6 and locust scripts for load tests.",
+    "ci_and_scans": "GitHub Actions must include jobs for linting/formatting, unit tests, contract tests, SBOM generation (syft), container scanning (trivy), and optional dependency scanning (snyk). Provide sample steps and placeholders for secrets.",
+    "packaging": "Provide Dockerfiles for Python & Node examples, Helm chart scaffold, Kubernetes deployment manifests with liveness/readiness probes and NetworkPolicy example that denies egress by default.",
+    "sdk_and_cli": "Include minimal Python SDK and CLI `mcpctl`, Node SDK skeleton (index.js), and notes for generating typed clients from `spec/mcp.proto` for Go (use `protoc` and `protoc-gen-go`).",
+    "runbooks_and_playbooks": "Add at least three fully detailed runbooks: high error rate, suspected data leak, and key rotation/emergency auth fail. Each runbook should include detection triggers, immediate actions, mitigation steps, forensic preservation steps, and communications templates.",
+    "policy_as_code": "Provide OPA Rego examples for capability authorization, a sample `policy/tests` JSON to exercise policies, and GH Action job to run `opa test` on policy changes.",
+    "supply_chain": "Add SBOM generation script, instructions to sign artifacts (cosign), and sample commands for verifying image signatures during deploy.",
+    "example_tools": "Provide working example implementations (or stubs) for: get_time, echo, file_search (stubbed), db_query (Postgres example with docker-compose), vector_search (instructions to plug Milvus/FAISS) and secrets_retrieve (Vault integration demo).",
+    "privacy_and_compliance": "Document obligations and include example PII redaction code (simple regex-based) and sample retention configuration.",
+    "developer_workflow": "Add detailed contributor checklist, commit message conventions (Conventional Commits), PR template, and release instructions (semantic-release recommended)."
+  },
+  "usage_instructions": "Use this JSON as the canonical repo-generation prompt. Create directories and files exactly as specified. After generating files, run the example servers to validate they are runnable locally. Replace placeholders (`yourdocker/repo`, `demo-secret`, `YOUR_VAULT_ADDR`, etc.) with production secrets/values before deploying. Add real diagrams under `/diagrams/` and real Grafana dashboards if desired.",
+  "final_note": "If you'd like, I can now: (A) produce a ZIP archive of all files (assembled from this prompt) ready to download, (B) output a shell script that creates the files locally, or (C) generate a GitHub REST API sequence (curl commands) to create the repo and push files programmatically. Tell me which and I'll produce it immediately."
+}
