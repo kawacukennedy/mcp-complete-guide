@@ -5,6 +5,9 @@
   "capabilities": [
     {"name":"get_time","description":"Get current UTC time","input_schema_ref":"/spec/schemas/empty.json","output_schema_ref":"/spec/schemas/get_time_output.json","auth_required":false,"idempotent":true},
     {"name":"echo","description":"Echo input","input_schema_ref":"/spec/schemas/any.json","output_schema_ref":"/spec/schemas/any.json","auth_required":false,"idempotent":true},
-    {"name":"file_search","description":"Search indexed files","input_schema_ref":"/spec/schemas/file_search_input.json","output_schema_ref":"/spec/schemas/file_search_output.json","auth_required":true,"scopes":["file:read"],"rate_limit":{"requests_per_minute":120}}
+    {"name":"file_search","description":"Search indexed files","input_schema_ref":"/spec/schemas/file_search_input.json","output_schema_ref":"/spec/schemas/file_search_output.json","auth_required":true,"scopes":["file:read"],"rate_limit":{"requests_per_minute":120}},
+    {"name":"db_query","description":"Query Postgres database","input_schema_ref":"/spec/schemas/db_query_input.json","output_schema_ref":"/spec/schemas/db_query_output.json","auth_required":true,"scopes":["db:read"]},
+    {"name":"vector_search","description":"Search vector database","input_schema_ref":"/spec/schemas/vector_search_input.json","output_schema_ref":"/spec/schemas/vector_search_output.json","auth_required":false},
+    {"name":"secrets_retrieve","description":"Retrieve secrets from Vault","input_schema_ref":"/spec/schemas/secrets_retrieve_input.json","output_schema_ref":"/spec/schemas/secrets_retrieve_output.json","auth_required":true,"scopes":["secrets:read"]}
   ]
 }

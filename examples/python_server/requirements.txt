@@ -4,3 +4,7 @@ prometheus-client==0.16.0
 opentelemetry-api==1.18.0
 opentelemetry-sdk==1.18.0
 python-json-logger==2.0.4
+psycopg2-binary==2.9.7
+faiss-cpu==1.7.4
+numpy==1.24.3
+hvac==1.1.1

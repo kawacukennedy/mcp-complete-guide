@@ -66,6 +66,15 @@ async def invoke(request):
             q = input_payload.get('query','')
             # demo: return stubbed results
             result = {'matches':[{'path':'/var/log/syslog','score':0.93,'snippet':'...'}]}
+        elif tool == 'db_query':
+            # demo: stubbed DB query
+            result = {'rows': [{'id': 1, 'name': 'example'}], 'row_count': 1}
+        elif tool == 'vector_search':
+            # demo: stubbed vector search
+            result = {'results': [{'id': 'doc1', 'score': 0.85, 'metadata': {'title': 'Example'}}]}
+        elif tool == 'secrets_retrieve':
+            # demo: stubbed secrets
+            result = {'data': {'password': 'secret123'}}
         else:
             result = {'error': 'not_implemented'}
 
