@@ -1,0 +1,46 @@
+name: Build and Push Docker Images
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-python:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build Python Image
+        run: |
+          cd examples/python_server
+          docker build -t mcp-python:latest .
+      - name: Test Python Image
+        run: docker run --rm mcp-python:latest python --version
+
+  build-node:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build Node Image
+        run: |
+          cd examples/node_server
+          docker build -t mcp-node:latest .
+      - name: Test Node Image
+        run: docker run --rm mcp-node:latest node --version
+
+  build-go:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build Go Image
+        run: |
+          cd examples/go_server
+          docker build -t mcp-go:latest .
+      - name: Test Go Image
+        run: docker run --rm mcp-go:latest /bin/sh -c "echo 'Go image built'"
