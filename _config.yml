@@ -1,0 +1,26 @@
+title: "MCP Complete Guide"
+description: "Exhaustive guide and starter kit for Model Context Protocol (MCP) servers with specs, implementations in Python, Node.js, Go, security, observability, and deployment."
+url: "https://kawacukennedy.github.io"
+baseurl: "/mcp-complete-guide"
+author: kawacukennedy
+plugins:
+  - jekyll-sitemap
+  - jekyll-seo-tag
+  - jekyll-feed
+
+# SEO
+social:
+  name: MCP Complete Guide
+  links:
+    - https://github.com/kawacukennedy/mcp-complete-guide
+
+# Exclude from processing
+exclude:
+  - vendor/
+  - .bundle/
+  - .sass-cache/
+  - .jekyll-cache/
+  - gemfiles/
+  - Gemfile
+  - Gemfile.lock
+  - README.md
