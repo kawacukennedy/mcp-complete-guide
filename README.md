@@ -15,8 +15,39 @@ This repository contains:
 See `SUMMARY.md` for the table of contents and `docs/` for detailed chapters.
 
 <!-- SEO Meta -->
-<meta name="description" content="Exhaustive guide and starter kit for Model Context Protocol (MCP) servers with specs, implementations in Python, Node.js, Go, security, observability, and deployment.">
-<meta name="keywords" content="MCP, Model Context Protocol, AI tools, server implementations, JSON-RPC, gRPC, observability, security">
+<meta name="description" content="Comprehensive guide and starter kit for Model Context Protocol (MCP) servers. Includes formal specs, multi-language implementations (Python, Node.js, Go), security best practices, observability, CI/CD, and deployment artifacts.">
+<meta name="keywords" content="MCP, Model Context Protocol, AI tools, MCP server, JSON-RPC, gRPC, OpenTelemetry, Prometheus, Kubernetes, security, observability, API protocol">
 <meta name="author" content="kawacukennedy">
+<meta name="robots" content="index, follow">
+<meta name="language" content="English">
 <link rel="canonical" href="https://kawacukennedy.github.io/mcp-complete-guide/">
+<!-- Open Graph -->
+<meta property="og:title" content="MCP Complete Guide">
+<meta property="og:description" content="Exhaustive repository for Model Context Protocol (MCP) servers with specs, implementations, and operational artifacts.">
+<meta property="og:url" content="https://kawacukennedy.github.io/mcp-complete-guide/">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://kawacukennedy.github.io/mcp-complete-guide/images/mcp-logo.png">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MCP Complete Guide">
+<meta name="twitter:description" content="Comprehensive starter kit for MCP servers.">
+<meta name="twitter:image" content="https://kawacukennedy.github.io/mcp-complete-guide/images/mcp-logo.png">
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "MCP Complete Guide",
+  "description": "Exhaustive guide for Model Context Protocol servers",
+  "url": "https://kawacukennedy.github.io/mcp-complete-guide/",
+  "author": {
+    "@type": "Person",
+    "name": "kawacukennedy"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "kawacukennedy"
+  }
+}
+</script>
 <!-- End SEO Meta -->
